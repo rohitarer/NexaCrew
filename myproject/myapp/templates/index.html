@@ -1,0 +1,50 @@
+<!-- myapp/templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Q&A</title>
+</head>
+<body>
+    <h1>Upload PDF and Ask Questions</h1>
+    <form id="uploadForm" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="pdf" required>
+        <button type="submit">Upload PDF</button>
+    </form>
+
+    <form id="askForm" method="post">
+        {% csrf_token %}
+        <input type="text" name="question" placeholder="Ask a question..." required>
+        <button type="submit">Ask</button>
+    </form>
+
+    <div id="response"></div>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            let formData = new FormData(this);
+            let response = await fetch('{% url "upload_pdf" %}', {
+                method: 'POST',
+                body: formData,
+            });
+            let result = await response.json();
+            document.getElementById('response').innerText = JSON.stringify(result);
+        });
+
+        document.getElementById('askForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            let formData = new FormData(this);
+            let response = await fetch('{% url "ask_question" %}', {
+                method: 'POST',
+                body: formData,
+            });
+            let result = await response.json();
+            document.getElementById('response').innerText = result.answer || JSON.stringify(result);
+        });
+    </script>
+</body>
+</html>
