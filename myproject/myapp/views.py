@@ -6,9 +6,10 @@ import numpy as np
 import google.generativeai as genai
 from sklearn.metrics.pairwise import cosine_similarity
 import os
+from django.views.decorators.csrf import csrf_exempt
 
 # Set your API key
-API_KEY = 'YOUR_GOOGLE_API_KEY'  # Replace with your actual API key
+API_KEY = 'AIzaSyCrbeU4QGZYHXR2AIAfeiko5AN8NCerQ24'  # Replace with your actual API key
 genai.configure(api_key=API_KEY)
 
 def embed_content(title, text, model='models/text-embedding-004', task_type='retrieval_document'):
